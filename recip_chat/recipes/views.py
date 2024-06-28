@@ -51,3 +51,7 @@ class ChatbotAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def test_html_view(request):
+    return render(request, 'src/index.html')
