@@ -6,6 +6,7 @@ from .serializers import RecipeSerializer, ChatbotRequestSerializer, ChatbotResp
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .services import ChatGPTService
+from rest_framework.generics import ListAPIView
 from django.http import JsonResponse
 
 
@@ -55,3 +56,8 @@ class ChatbotAPIView(APIView):
 
 def test_html_view(request):
     return render(request, 'src/index.html')
+
+
+class ChatHistoryList(ListAPIView):
+    queryset = ChatHistory.objects.all()
+    serializer_class = ChatHistorySerializer
