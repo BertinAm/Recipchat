@@ -5,12 +5,9 @@ from rest_framework import status
 from .serializers import RecipeSerializer, ChatbotRequestSerializer, ChatbotResponseSerializer, ChatHistorySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .services import ChatGPTService
-from rest_framework.generics import ListAPIView
+from .services import GeminiService  # Updated import
 from django.http import JsonResponse
-
-
-# Create your views here.
+from rest_framework.generics import ListAPIView
 
 
 class RecipeListCreate(generics.ListCreateAPIView):
@@ -31,8 +28,8 @@ class ChatbotAPIView(APIView):
                 user_message = serializer.validated_data['message']
 
                 # Process user message and generate bot response
-                chatgpt_service = ChatGPTService()
-                response_message = chatgpt_service.generate_recipe_details(user_message)
+                gemini_service = GeminiService()  # Updated service
+                response_message = gemini_service.generate_response(user_message, temperature=1, max_output_tokens=20000)  # Updated method call
 
                 # Save chat history
                 chat_history_data = {
@@ -51,6 +48,7 @@ class ChatbotAPIView(APIView):
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
